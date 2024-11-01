@@ -5,6 +5,8 @@ let matches = books
 
 const starting = document.createDocumentFragment()
 
+
+// Preview showing the image and authors name on UI
 for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
     const element = document.createElement('button')
     element.classList = 'preview'
@@ -27,6 +29,8 @@ for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
 
 document.querySelector('[data-list-items]').appendChild(starting)
 
+// Dropdown with genres user can pick from
+
 const genreHtml = document.createDocumentFragment()
 const firstGenreElement = document.createElement('option')
 firstGenreElement.value = 'any'
@@ -41,6 +45,8 @@ for (const [id, name] of Object.entries(genres)) {
 }
 
 document.querySelector('[data-search-genres]').appendChild(genreHtml)
+
+// Dropdown with authors user can pick from
 
 const authorsHtml = document.createDocumentFragment()
 const firstAuthorElement = document.createElement('option')
@@ -57,6 +63,8 @@ for (const [id, name] of Object.entries(authors)) {
 
 document.querySelector('[data-search-authors]').appendChild(authorsHtml)
 
+//Toggles theme 
+
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     document.querySelector('[data-settings-theme]').value = 'night'
     document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
@@ -67,6 +75,7 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
     document.documentElement.style.setProperty('--color-light', '255, 255, 255');
 }
 
+// Allows users to view more books
 document.querySelector('[data-list-button]').innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
 document.querySelector('[data-list-button]').disabled = (matches.length - (page * BOOKS_PER_PAGE)) > 0
 
@@ -75,6 +84,9 @@ document.querySelector('[data-list-button]').innerHTML = `
     <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
 `
 
+// Buttons section
+
+//
 document.querySelector('[data-search-cancel]').addEventListener('click', () => {
     document.querySelector('[data-search-overlay]').open = false
 })
@@ -96,6 +108,7 @@ document.querySelector('[data-list-close]').addEventListener('click', () => {
     document.querySelector('[data-list-active]').open = false
 })
 
+// Modal for toggling themes
 document.querySelector('[data-settings-form]').addEventListener('submit', (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -111,6 +124,8 @@ document.querySelector('[data-settings-form]').addEventListener('submit', (event
     
     document.querySelector('[data-settings-overlay]').open = false
 })
+
+// Gets the user input from the search modal and then displays it.
 
 document.querySelector('[data-search-form]').addEventListener('submit', (event) => {
     event.preventDefault()
@@ -138,6 +153,7 @@ document.querySelector('[data-search-form]').addEventListener('submit', (event) 
     page = 1;
     matches = result
 
+// Shows filtered books in the UI
     if (result.length < 1) {
         document.querySelector('[data-list-message]').classList.add('list__message_show')
     } else {
@@ -170,6 +186,8 @@ document.querySelector('[data-search-form]').addEventListener('submit', (event) 
     document.querySelector('[data-list-items]').appendChild(newItems)
     document.querySelector('[data-list-button]').disabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
 
+    //Calculates the show more 
+
     document.querySelector('[data-list-button]').innerHTML = `
         <span>Show more</span>
         <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
@@ -182,6 +200,7 @@ document.querySelector('[data-search-form]').addEventListener('submit', (event) 
 document.querySelector('[data-list-button]').addEventListener('click', () => {
     const fragment = document.createDocumentFragment()
 
+    // Shows preview on book
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
         const element = document.createElement('button')
         element.classList = 'preview'
@@ -205,6 +224,8 @@ document.querySelector('[data-list-button]').addEventListener('click', () => {
     document.querySelector('[data-list-items]').appendChild(fragment)
     page += 1
 })
+
+//Checks which book was clicked 
 
 document.querySelector('[data-list-items]').addEventListener('click', (event) => {
     const pathArray = Array.from(event.path || event.composedPath())
