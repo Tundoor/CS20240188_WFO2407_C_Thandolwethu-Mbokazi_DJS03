@@ -37,9 +37,8 @@ const elements = {
 
 }
 
-
-// Preview showing the image and authors name on UI
-for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
+// So that users can see books on the UI
+function renderBookList (author, id, image, title, fragment) {
     const element = document.createElement('button')
     element.classList = 'preview'
     element.setAttribute('data-preview', id)
@@ -54,9 +53,17 @@ for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
             <h3 class="preview__title">${title}</h3>
             <div class="preview__author">${authors[author]}</div>
         </div>
-    `
+    ` 
+    fragment.appendChild(element)
+}
 
-    starting.appendChild(element)
+
+
+// Preview showing the image and authors name on UI when loaded
+
+for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
+  renderBookList(author, id, image, title, starting)
+  
 }
 
 elements.dataListItems.appendChild(starting)
@@ -69,6 +76,7 @@ firstGenreElement.value = 'any'
 firstGenreElement.innerText = 'All Genres'
 genreHtml.appendChild(firstGenreElement)
 
+// Allows Users to select a genre
 for (const [id, name] of Object.entries(genres)) {
     const element = document.createElement('option')
     element.value = id
@@ -195,23 +203,7 @@ elements.searchForm.addEventListener('submit', (event) => {
     const newItems = document.createDocumentFragment()
 
     for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
-    
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `
-
-        newItems.appendChild(element)
+        renderBookList(author, id, image, title, newItems)
     }
 
     elements.dataListItems.appendChild(newItems)
@@ -233,23 +225,7 @@ elements.searchForm.addEventListener('submit', (event) => {
 
     // Shows preview on book
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
-    
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `
-
-        fragment.appendChild(element)
+         renderBookList( author, id, image, title, fragment)
     }
 
     elements.dataListItems.appendChild(fragment)
