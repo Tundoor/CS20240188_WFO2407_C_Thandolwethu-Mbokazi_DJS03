@@ -56,7 +56,7 @@ function dropDownMenuOptions (id, name, html) {
     const element = document.createElement('option')
     element.value = id
     element.innerText = name
-    authorsHtml.appendChild(element)
+    html.appendChild(element)
 }
 
 // Handles the theme colors 
@@ -69,9 +69,6 @@ function themeLightColor () {
     document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
     document.documentElement.style.setProperty('--color-light', '255, 255, 255');
 }
-
-// git config --global user.email "you@example.com"
-  git config --global user.name "Your Name"
 
 
 let page = 1;
@@ -163,6 +160,7 @@ elements.dataListCloseModalBtn.addEventListener('click', () => {
 })
 
 // Modal for toggling themes
+
 elements.settingsForm.addEventListener('submit', (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -215,6 +213,8 @@ elements.searchForm.addEventListener('submit', (event) => {
     elements.dataListItems.innerHTML = ''
     const newItems = document.createDocumentFragment()
 
+// Shows list of book by author
+
     for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
         renderBookList(author, id, image, title, newItems)
     }
@@ -222,9 +222,8 @@ elements.searchForm.addEventListener('submit', (event) => {
     elements.dataListItems.appendChild(newItems)
     elements.showMoreBtn.disabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
 
-    //Calculates the show more 
-
-   elements.showMoreBtn.innerHTML = `
+     //Let's user know how many books are in show more. 
+elements.showMoreBtn.innerHTML = `
         <span>Show more</span>
         <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
     `
@@ -237,6 +236,7 @@ elements.searchForm.addEventListener('submit', (event) => {
     const fragment = document.createDocumentFragment()
 
     // Shows preview on book
+
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
          renderBookList( author, id, image, title, fragment)
     }
@@ -265,7 +265,8 @@ elements.dataListItems.addEventListener('click', (event) => {
             active = result
         }
     }
-    
+ // Show Details of book
+
     if (active) {
         document.querySelector('[data-list-active]').open = true
         document.querySelector('[data-list-blur]').src = active.image
