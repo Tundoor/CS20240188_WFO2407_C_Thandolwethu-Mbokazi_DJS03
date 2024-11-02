@@ -1,10 +1,5 @@
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 
-let page = 1;
-let matches = books
-
-const starting = document.createDocumentFragment()
-
 // Elements from HTML
 const elements = {
     dataListItems : document.querySelector('[data-list-items]'),
@@ -33,8 +28,6 @@ const elements = {
     dataListCloseModalBtn : document.querySelector('[data-list-close]'),
     dataListModal : document.querySelector('[data-list-active]'),
     
-    
-
 }
 
 // So that users can see books on the UI
@@ -57,7 +50,34 @@ function renderBookList (author, id, image, title, fragment) {
     fragment.appendChild(element)
 }
 
+// Creates options for user to choose from in dropDown
 
+function dropDownMenuOptions (id, name, html) {
+    const element = document.createElement('option')
+    element.value = id
+    element.innerText = name
+    authorsHtml.appendChild(element)
+}
+
+// Handles the theme colors 
+function themeDarkColor () {
+    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+}
+
+function themeLightColor () {
+    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+}
+
+// git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+
+let page = 1;
+let matches = books
+
+const starting = document.createDocumentFragment()
 
 // Preview showing the image and authors name on UI when loaded
 
@@ -77,11 +97,9 @@ firstGenreElement.innerText = 'All Genres'
 genreHtml.appendChild(firstGenreElement)
 
 // Allows Users to select a genre
+
 for (const [id, name] of Object.entries(genres)) {
-    const element = document.createElement('option')
-    element.value = id
-    element.innerText = name
-    genreHtml.appendChild(element)
+    dropDownMenuOptions (id, name, genreHtml) 
 }
 
 elements.searchGenre.appendChild(genreHtml)
@@ -94,11 +112,10 @@ firstAuthorElement.value = 'any'
 firstAuthorElement.innerText = 'All Authors'
 authorsHtml.appendChild(firstAuthorElement)
 
+// Allows users to pick a author
+
 for (const [id, name] of Object.entries(authors)) {
-    const element = document.createElement('option')
-    element.value = id
-    element.innerText = name
-    authorsHtml.appendChild(element)
+   dropDownMenuOptions (id, name, authorsHtml)
 }
 
 elements.searchAuthors.appendChild(authorsHtml)
@@ -107,12 +124,10 @@ elements.searchAuthors.appendChild(authorsHtml)
 
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     elements.settingsTheme.value = 'night'
-    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+    themeDarkColor ()
 } else {
     elements.settingsTheme.value = 'day'
-    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    themeLightColor ()
 }
 
 // Allows users to view more books
@@ -154,11 +169,9 @@ elements.settingsForm.addEventListener('submit', (event) => {
     const { theme } = Object.fromEntries(formData)
 
     if (theme === 'night') {
-        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+        themeDarkColor ()
     } else {
-        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+        themeLightColor ()
     }
     
     elements.settingsModal.open = false
